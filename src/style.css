@@ -1,6 +1,6 @@
 * {
   background-color: rgb(230, 230, 230);
-  font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
   font-style: normal;
 }
 
@@ -9,12 +9,12 @@
   font-style: italic;
 }
 
-:-ms-input-placeholder { /* Internet Explorer 10-11 */
+::-ms-input-placeholder { /* Microsoft Edge */
   opacity: 0.8;
   font-style: italic;
 }
 
-::-ms-input-placeholder { /* Microsoft Edge */
+:-ms-input-placeholder { /* Internet Explorer 10-11 */
   opacity: 0.8;
   font-style: italic;
 }
@@ -67,4 +67,3 @@
 .footer p {
   padding: 10px;
 }
-

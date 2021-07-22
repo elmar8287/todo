@@ -1,21 +1,37 @@
-// import _ from 'lodash';
-// import './style.css';
-// import Icon from './icon.png';
+import './style.css';
 
-// function component() {
-//   const element = document.createElement('div');
+const todos = document.querySelector('.todos');
+const todo = [
+  {
+    index: 1,
+    desc: '1st task',
+    completed: true,
+  },
+  {
+    index: 2,
+    desc: '2nd task',
+    completed: false,
+  },
+  {
+    index: 3,
+    desc: '3d task',
+    completed: false,
+  },
+];
 
-//   // Lodash, now imported by this script
-//   element.innerHTML = _.join(['Hello', 'webpack'], ' ');
-//   element.classList.add('hello');
+const showTodo = (todo) => {
+  todo.forEach((e) => {
+    const task = document.createElement('div');
+    task.innerHTML = `
+  
+    <div class="points">
+    <input class="check" type="checkbox" id="desc" name="desc" value="${e.index}">${e.desc}
+    <i class="fas fa-ellipsis-v" style="color: gray; float: right;"></i>
+    </div>
+    `;
 
-//   // Add the image to our existing div.
-//   const myIcon = new Image();
-//   myIcon.src = Icon;
+    todos.appendChild(task);
+  });
+};
 
-//   element.appendChild(myIcon);
-
-//   return element;
-// }
-
-// document.body.appendChild(component());
+showTodo(todo);

@@ -67,3 +67,17 @@
 .footer p {
   padding: 10px;
 }
+
+.check {
+  width: 10px;
+  margin: 0 10px;
+}
+
+.points {
+  background-color: rgb(247, 247, 247);
+}
+
+.footer p:hover,
+.points:hover {
+  background-color: rgb(235, 235, 235);
+}

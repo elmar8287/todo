@@ -16,6 +16,7 @@ Tasks to do:
 - CSS
 - JS
 - webpack
+- JSON
 
 ## Authors
 

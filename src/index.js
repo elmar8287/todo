@@ -1,5 +1,30 @@
 const form = document.querySelector('.inputs');
 
+let todoList = [{
+    index: 1,
+    description: 'Create a todo list website',
+    completed: false,
+  },
+  {
+    index: 2,
+    description: 'Submit all week activities',
+    completed: false,
+  },
+  {
+    index: 3,
+    description: 'Spend week-end with family',
+    completed: false,
+  },
+];
+out();
+
+//check local storage
+
+if (localStorage.getItem('todo') != undefined) {
+  todoList = JSON.parse(localStorage.getItem('todo'));
+  out();
+}
+
 // render to div
 
 function out() {
@@ -17,32 +42,6 @@ function out() {
 
   const xxx = document.querySelector('.js-todo-list');
   xxx.innerHTML = out;
-}
-
-let todoList = [
-  {
-    index: 1,
-    description: 'Create a todo list website',
-    completed: false, 
-  },
-  {
-    index: 2,
-    description: 'Submit all week activities',
-    completed: false, 
-  },
-  {
-    index: 3,
-    description: 'Spend week-end with family',
-    completed: false, 
-  },
-];
-out();
-
-//check local storage
-
-if (localStorage.getItem('todo')!=undefined) {
-  todoList = JSON.parse(localStorage.getItem('todo'));
-  out();
 }
 
 //event when submit form
@@ -64,6 +63,6 @@ form.addEventListener('submit', event => {
   out();
 
   //local storage
-  
+
   localStorage.setItem('todo', JSON.stringify(todoList));
 });

@@ -8,7 +8,7 @@ Tasks to do:
 - Project 2: Interactive list.
 - Project 3: Add and remove items.
 
-![Screen Shot]()
+![Screen Shot](./src/scrn-sht.PNG)
 
 ## Built With
 

@@ -1,22 +1,6 @@
 const form = document.querySelector('.inputs');
-let todoList = [
-  {
-    index: 1,
-    description: 'Create a todo list website',
-    completed: false, 
-  },
-  {
-    index: 2,
-    description: 'Submit all week activities',
-    completed: false, 
-  },
-  {
-    index: 3,
-    description: 'Spend week-end with family',
-    completed: false, 
-  },
-];
-out();
+let todoList = [];
+
 //check local storage
 if (localStorage.getItem('todo')!=undefined) {
   todoList = JSON.parse(localStorage.getItem('todo'));
@@ -47,14 +31,14 @@ function out() {
   let out = '';
   for (let key in todoList) {
     if (todoList[key].complited == true) {
-      out += `<input type="checkbox" checked `;
+      out += `<input type="checkbox" checked id="check-b"`;
     } else {
-      out += `<input type="checkbox" >`;
+      out += `<input type="checkbox">`;
       
     }
 
     out += todoList[key].description;
-    out += `<p id="ppp"></p><br>`;
+    out += `<p id="ppp">sdfsdf</p><br>`;
     
   }
   const xxx = document.querySelector('.js-todo-list');

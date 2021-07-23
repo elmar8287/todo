@@ -1,20 +1,20 @@
 * {
   background-color: rgb(230, 230, 230);
-  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  font-family:Verdana, Geneva, Tahoma, sans-serif;
   font-style: normal;
 }
 
-::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
-  opacity: 0.8; /* Firefox */
-  font-style: italic;
-}
-
-::-ms-input-placeholder { /* Microsoft Edge */
+::placeholder {
   opacity: 0.8;
   font-style: italic;
 }
 
-:-ms-input-placeholder { /* Internet Explorer 10-11 */
+::-ms-input-placeholder {
+  opacity: 0.8;
+  font-style: italic;
+}
+
+:-ms-input-placeholder {
   opacity: 0.8;
   font-style: italic;
 }
@@ -66,6 +66,7 @@
 
 .footer p {
   padding: 10px;
+  font-size: 15px;
 }
 
 .check {
@@ -81,3 +82,27 @@
 .points:hover {
   background-color: rgb(235, 235, 235);
 }
+
+#ppp {
+  border-bottom: solid rgb(241, 241, 241);
+  margin: 4px;
+  padding: 4px;
+}
+
+/* .js-todo-list {
+  background-color:rgb(240, 240, 240);
+  display: flex;
+  flex-direction: column;
+  
+} */
+
+
+/* #ppp {
+  display: inline-block;
+  margin-left: 85%;
+}
+
+#ppp img {
+  width: 20px;
+  height: 20px;
+} */

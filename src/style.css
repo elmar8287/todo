@@ -1,6 +1,6 @@
 * {
   background-color: rgb(230, 230, 230);
-  font-family:Verdana, Geneva, Tahoma, sans-serif;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
   font-style: normal;
 }
 
@@ -93,9 +93,7 @@
   background-color:rgb(240, 240, 240);
   display: flex;
   flex-direction: column;
-  
 } */
-
 
 /* #ppp {
   display: inline-block;

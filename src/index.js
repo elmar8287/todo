@@ -1,4 +1,24 @@
 const form = document.querySelector('.inputs');
+
+// render to div
+
+function out() {
+  let out = '';
+  for (const key in todoList) {
+    if (todoList[key].complited === true) {
+      out += `<input type='checkbox' checked `;
+    } else {
+      out += `<input type='checkbox'>`;
+    }
+
+    out += todoList[key].description;
+    out += `<p id='ppp'></p><br>`;
+  }
+
+  const xxx = document.querySelector('.js-todo-list');
+  xxx.innerHTML = out;
+}
+
 let todoList = [
   {
     index: 1,
@@ -17,15 +37,20 @@ let todoList = [
   },
 ];
 out();
+
 //check local storage
+
 if (localStorage.getItem('todo')!=undefined) {
   todoList = JSON.parse(localStorage.getItem('todo'));
   out();
 }
 
 //event when submit form
+
 form.addEventListener('submit', event => {
+
   // prevent page refresh on form submission
+
   event.preventDefault();
   const aaa = document.querySelector('.input').value;
   // {description : Add task, complited: false, index: 1}
@@ -39,24 +64,6 @@ form.addEventListener('submit', event => {
   out();
 
   //local storage
+  
   localStorage.setItem('todo', JSON.stringify(todoList));
 });
-
-// render to div
-function out() {
-  let out = '';
-  for (let key in todoList) {
-    if (todoList[key].complited == true) {
-      out += `<input type="checkbox" checked `;
-    } else {
-      out += `<input type="checkbox" >`;
-      
-    }
-
-    out += todoList[key].description;
-    out += `<p id="ppp"></p><br>`;
-    
-  }
-  const xxx = document.querySelector('.js-todo-list');
-  xxx.innerHTML = out;
-}

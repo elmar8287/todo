@@ -1,27 +1,29 @@
+/* eslint-disable */
+
+
 const form = document.querySelector('.inputs');
 
-let todoList = [
-  {
-  index: 1,
-  description: 'Create a todo list website',
-  completed: false,
+let todoList = [{
+    index: 1,
+    description: 'Create a todo list website',
+    completed: false,
   },
   {
-  index: 2,
-  description: 'Submit all week activities',
-  completed: false,
+    index: 2,
+    description: 'Submit all week activities',
+    completed: false,
   },
   {
-  index: 3,
-  description: 'Spend week-end with family',
-  completed: false,
+    index: 3,
+    description: 'Spend week-end with family',
+    completed: false,
   },
 ];
 out();
 
-// check local storage
+//check local storage
 
-if (localStorage.getItem('todo') !== undefined) {
+if (localStorage.getItem('todo') != undefined) {
   todoList = JSON.parse(localStorage.getItem('todo'));
   out();
 }
@@ -45,7 +47,7 @@ function out() {
   xxx.innerHTML = out;
 }
 
-// event when submit form
+//event when submit form
 form.addEventListener('submit', event => {
   // prevent page refresh on form submission
   event.preventDefault();

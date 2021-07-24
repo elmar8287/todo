@@ -24,8 +24,6 @@ Tasks to do:
 
 - GitHub: [@elmar8287](https://github.com/elmar8287)
 
-## Live demo
-You can visit live version via [link](https://elmar8287.github.io/todo/)
 
 ## 🤝 Contributing
 

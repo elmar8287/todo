@@ -1,67 +1,152 @@
 /* eslint-disable */
 
-
-const form = document.querySelector('.inputs');
-
-let todoList = [{
-    index: 1,
-    description: 'Create a todo list website',
-    completed: false,
-  },
-  {
-    index: 2,
-    description: 'Submit all week activities',
-    completed: false,
-  },
-  {
-    index: 3,
-    description: 'Spend week-end with family',
-    completed: false,
-  },
-];
-out();
-
-//check local storage
-
-if (localStorage.getItem('todo') != undefined) {
-  todoList = JSON.parse(localStorage.getItem('todo'));
-  out();
+function dragndrop(arr) {
+  arr.forEach((element) => {
+    const task = document.getElementById(element.index);
+    task.addEventListener('dragstart', (event) => {
+      event.dataTransfer.setData('index', element.index);
+    });
+    task.addEventListener('drop', (event) => {
+      const draggedIndex = event.dataTransfer.getData('index');
+      const dropIndex = element.index;
+      const dragged = arr[draggedIndex];
+      const drop = arr[dropIndex];
+      // swap
+      arr[draggedIndex] = drop;
+      arr[dropIndex] = dragged;
+      // Update indexes
+      dragged.index = dropIndex;
+      drop.index = draggedIndex;
+      task.setAttribute('draggable', false);
+      window.localStorage.setItem('tasklist', JSON.stringify(arr));
+      window.location.reload();
+    });
+    task.addEventListener('dragover', (event) => {
+      event.preventDefault();
+    });
+  });
 }
 
-// render to div
+function mousedown(element) {
+  const parent = element.parentElement;
+  element.addEventListener('mousedown', () => {
+    parent.setAttribute('draggable', true);
+  });
+}
 
-function out() {
-  let out = '';
-  for (const key in todoList) {
-    if (todoList[key].complited === true) {
-      out += `<input type='checkbox' checked `;
+function status(arr) {
+  arr.forEach((element) => {
+    const checkbox = document.getElementById(`${element.index}-checkbox`);
+    checkbox.addEventListener('change', () => {
+      if (checkbox.checked) {
+        element.completed = true;
+        window.localStorage.setItem('tasklist', JSON.stringify(arr));
+      } else {
+        element.completed = false;
+        window.localStorage.setItem('tasklist', JSON.stringify(arr));
+      }
+    });
+  });
+}
+
+function prepopstatus(arr) {
+  arr.forEach((element) => {
+    const checkbox = document.getElementById(`${element.index}-checkbox`);
+    if (element.completed === true) {
+      checkbox.checked = true;
     } else {
-      out += `<input type='checkbox'>`;
+      checkbox.checked = false;
     }
-
-    out += todoList[key].description;
-    out += `<p id='ppp'></p><br>`;
-  }
-
-  const xxx = document.querySelector('.js-todo-list');
-  xxx.innerHTML = out;
+  });
 }
 
-//event when submit form
-form.addEventListener('submit', event => {
-  // prevent page refresh on form submission
-  event.preventDefault();
-  const aaa = document.querySelector('.input').value;
-  // {description : Add task, complited: false, index: 1}
-  const bbb = {};
-  bbb.description = aaa;
-  bbb.complited = false;
-  bbb.index = Date.now();
-  const i = todoList.length;
-  todoList[i] = bbb;
-  out();
+const form = document.getElementById('form');
+const taskinput = document.querySelector('.taskadder');
+const sync = document.querySelector('.sync');
+const entericon = document.querySelector('.enter-icon');
+const deletecompleted = document.getElementById('delcompleted');
+const list = [];
+let displayedList;
 
-  // local storage
+const todoList = (arr) => {
+  arr.forEach((element) => {
+    const duties = document.getElementById('duties');
+    // Create task li //
+    duties
+      .appendChild(document.createElement('li'))
+      .setAttribute('id', element.index);
+    const task = document.getElementById(element.index);
+    task.classList.add('task', 'draggable');
+    // Create checkbox //
+    task
+      .appendChild(document.createElement('input'))
+      .setAttribute('id', `${element.index}-checkbox`);
+    const checkbox = document.getElementById(`${element.index}-checkbox`);
+    checkbox.setAttribute('type', 'checkbox');
+    checkbox.classList.add('checkbox');
+    // Create description //
+    task
+      .appendChild(document.createElement('p'))
+      .setAttribute('id', `${element.index}-description`);
+    const description = document.getElementById(`${element.index}-description`);
+    description.classList.add('description');
+    description.innerText = element.description;
+    // Create DragBtn //
+    task
+      .appendChild(document.createElement('i'))
+      .setAttribute('id', `${element.index}-drag`);
+    const dragBtn = document.getElementById(`${element.index}-drag`);
+    dragBtn.classList.add('fas', 'fa-ellipsis-v', 'drag-btn');
+    // create trashcan //
+    task
+      .appendChild(document.createElement('i'))
+      .setAttribute('id', `${element.index}-trash`);
+    const trashBtn = document.getElementById(`${element.index}-trash`);
+    trashBtn.classList.add('far', 'fa-trash-alt', 'trash-btn');
+    // Create add event listeners //
+    mousedown(dragBtn);
+  });
+  dragndrop(arr);
+  status(arr);
+  prepopstatus(arr);
+  edit(arr);
+  removetask(arr);
+};
 
-  localStorage.setItem('todo', JSON.stringify(todoList));
+const retrieve = () => {
+  if (JSON.parse(localStorage.getItem('tasklist'))) {
+    displayedList = JSON.parse(localStorage.getItem('tasklist'));
+    todoList(displayedList);
+  } else {
+    displayedList = list;
+    todoList(displayedList);
+  }
+};
+
+form.addEventListener('submit', (e) => {
+  e.preventDefault();
+  if (taskinput.value !== '') {
+    const duty = new Duty(taskinput.value);
+    duty.push(displayedList);
+  }
 });
+
+entericon.addEventListener('click', (e) => {
+  e.preventDefault();
+  if (taskinput.value !== '') {
+    const duty = new Duty(taskinput.value);
+    duty.push(displayedList);
+  }
+});
+
+deletecompleted.addEventListener('click', (e) => {
+  e.preventDefault();
+  removecompleted(displayedList);
+});
+
+sync.addEventListener('click', (e) => {
+  e.preventDefault();
+  removeAll(displayedList);
+});
+
+document.addEventListener('load', retrieve());

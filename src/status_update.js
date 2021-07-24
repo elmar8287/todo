@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 export default function statusUpdate(tasks) {
   const checkbox = document.querySelectorAll('input[type=checkbox]');
   const descriptionSpans = document.getElementsByClassName('text');

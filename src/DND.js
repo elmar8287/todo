@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 class DND {
   constructor() {
     this.prevRow;

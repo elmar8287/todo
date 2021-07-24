@@ -1,0 +1,90 @@
+* {
+  background-color: rgb(230, 230, 230);
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  font-style: normal;
+}
+
+::placeholder {
+  opacity: 0.8;
+  font-style: italic;
+}
+
+::-ms-input-placeholder {
+  opacity: 0.8;
+  font-style: italic;
+}
+
+:-ms-input-placeholder {
+  opacity: 0.8;
+  font-style: italic;
+}
+
+.main {
+  background-color: #fff;
+  width: 30%;
+  border-radius: 5px;
+  margin: 100px auto;
+  border: 0.5px solid rgb(206, 206, 206);
+  box-shadow: 0 0 20px rgba(61, 60, 60, 0.959);
+}
+
+.main p {
+  margin: 0;
+  font-size: 20px;
+}
+
+.header {
+  border-bottom: 1px solid rgb(224, 224, 224);
+  margin: 0;
+  padding: 10px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.input {
+  border: none;
+  width: 100%;
+  padding: 8px;
+}
+
+.input:focus {
+  outline: none;
+}
+
+.inputs {
+  border-bottom: 1px solid rgb(224, 224, 224);
+  margin: 0;
+  padding: 5px;
+  display: flex;
+}
+
+.footer {
+  text-align: center;
+  color: rgb(100, 100, 100);
+  background-color: rgb(199, 199, 199);
+}
+
+.footer p {
+  padding: 10px;
+  font-size: 15px;
+}
+
+.check {
+  width: 10px;
+  margin: 0 10px;
+}
+
+.points {
+  background-color: rgb(247, 247, 247);
+}
+
+.footer p:hover,
+.points:hover {
+  background-color: rgb(235, 235, 235);
+}
+
+#ppp {
+  border-bottom: solid rgb(241, 241, 241);
+  margin: 4px;
+  padding: 4px;
+}

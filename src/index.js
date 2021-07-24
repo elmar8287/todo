@@ -58,6 +58,7 @@
     let buttonGroup = document.createElement("div");
     let doneButton = document.createElement("button");
     let deleteButton = document.createElement("button");
+    let editButton = document.createElement("button");
     
 
     item.classList.add(
@@ -71,12 +72,18 @@
     doneButton.classList.add("btn", "btn-success");
     doneButton.textContent = "Done";
     doneButton.dataset.description = description;
+
+    editButton.classList.add("btn", "btn-info");
+    editButton.textContent = "Edit";
+    editButton.dataset.description = description;
     
     deleteButton.classList.add("btn", "btn-secondary");
     deleteButton.textContent = "Delete";
     deleteButton.dataset.description = description;
     buttonGroup.append(doneButton);
+    buttonGroup.append(editButton);
     buttonGroup.append(deleteButton);
+
     item.append(buttonGroup);
 
     if (complete == true) {
@@ -97,6 +104,14 @@
         if (todoItem.description == this.dataset.description) {
           item.remove();
           todoItemsDefault.splice(todoItemsDefault.indexOf(todoItem), 1);
+          setItLocal(todoItemsDefault);
+        }
+      });
+
+      editButton.addEventListener('click', function () {
+        if (todoItem.description == this.dataset.description) {
+          item.classList.toggle("list-group-item-success");
+          //
           setItLocal(todoItemsDefault);
         }
       });

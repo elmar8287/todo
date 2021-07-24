@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 (function () {
   let todoItemsDefault = JSON.parse(localStorage.getItem("todoItems"));
 

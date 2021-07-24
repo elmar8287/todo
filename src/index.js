@@ -1,174 +1,152 @@
 /* eslint-disable */
 
-(function () {
-  let todoItemsDefault = JSON.parse(localStorage.getItem("todoItems"));
+function dragndrop(arr) {
+  arr.forEach((element) => {
+    const task = document.getElementById(element.index);
+    task.addEventListener('dragstart', (event) => {
+      event.dataTransfer.setData('index', element.index);
+    });
+    task.addEventListener('drop', (event) => {
+      const draggedIndex = event.dataTransfer.getData('index');
+      const dropIndex = element.index;
+      const dragged = arr[draggedIndex];
+      const drop = arr[dropIndex];
+      // swap
+      arr[draggedIndex] = drop;
+      arr[dropIndex] = dragged;
+      // Update indexes
+      dragged.index = dropIndex;
+      drop.index = draggedIndex;
+      task.setAttribute('draggable', false);
+      window.localStorage.setItem('tasklist', JSON.stringify(arr));
+      window.location.reload();
+    });
+    task.addEventListener('dragover', (event) => {
+      event.preventDefault();
+    });
+  });
+}
 
-  function createAppTitle(title) {
-    let appTitle = document.createElement("h2");
-    appTitle.innerHTML = title;
-    return appTitle;
-  }
+function mousedown(element) {
+  const parent = element.parentElement;
+  element.addEventListener('mousedown', () => {
+    parent.setAttribute('draggable', true);
+  });
+}
 
-  function createTodoItemForm() {
-    let form = document.createElement("form");
-    let input = document.createElement("input");
-    let buttonWrapper = document.createElement("div");
-    let button = document.createElement("button");
-
-    form.classList.add("input-group", "mb-3");
-    input.classList.add("form-control");
-    input.placeholder = "Add to your list...";
-    buttonWrapper.classList.add("input-group-append");
-    button.classList.add("btn", "btn-primary");
-    button.textContent = "Add";
-    button.disabled = true;
-
-    buttonWrapper.append(button);
-    form.append(input);
-    form.append(buttonWrapper);
-
-    input.addEventListener("input", function (e) {
-      e.preventDefault();
-      if (input.value.length > 0) {
-        button.disabled = false;
-      } else if (input.value.length == 0) {
-        button.disabled = true;
+function status(arr) {
+  arr.forEach((element) => {
+    const checkbox = document.getElementById(`${element.index}-checkbox`);
+    checkbox.addEventListener('change', () => {
+      if (checkbox.checked) {
+        element.completed = true;
+        window.localStorage.setItem('tasklist', JSON.stringify(arr));
+      } else {
+        element.completed = false;
+        window.localStorage.setItem('tasklist', JSON.stringify(arr));
       }
     });
+  });
+}
 
-    return {
-      form,
-      input,
-      button,
-    };
-  }
-
-  function createTodoList() {
-    let list = document.createElement("ul");
-    list.classList.add("list-group");
-    return list;
-  }
-
-  function setItLocal(newState) {
-    localStorage.setItem("todoItems", JSON.stringify(newState));
-  }
-
-  function createTodoItem(description, complete) {
-    let item = document.createElement("li");
-    let buttonGroup = document.createElement("div");
-    let doneButton = document.createElement("button");
-    let deleteButton = document.createElement("button");
-    let editButton = document.createElement("button");
-    
-
-    item.classList.add(
-      "list-group-item",
-      "d-flex",
-      "justify-content-between",
-      "align-items-center"
-    );    
-    item.textContent = description;
-    buttonGroup.classList.add("btn-group", "btn-group-sm");
-    doneButton.classList.add("btn", "btn-success");
-    doneButton.textContent = "Done";
-    doneButton.dataset.description = description;
-
-    editButton.classList.add("btn", "btn-info");
-    editButton.textContent = "Edit";
-    editButton.dataset.description = description;
-    
-    deleteButton.classList.add("btn", "btn-secondary");
-    deleteButton.textContent = "Delete";
-    deleteButton.dataset.description = description;
-    buttonGroup.append(doneButton);
-    buttonGroup.append(editButton);
-    buttonGroup.append(deleteButton);
-
-    item.append(buttonGroup);
-
-    if (complete == true) {
-      item.classList.add("list-group-item-success");
+function prepopstatus(arr) {
+  arr.forEach((element) => {
+    const checkbox = document.getElementById(`${element.index}-checkbox`);
+    if (element.completed === true) {
+      checkbox.checked = true;
+    } else {
+      checkbox.checked = false;
     }
+  });
+}
 
-    for (let todoItem of todoItemsDefault) {
-      doneButton.addEventListener("click", function () {
-        if (todoItem.description == this.dataset.description) {
-          item.classList.toggle("list-group-item-success");
-          let index = todoItemsDefault.indexOf(todoItem);
-          todoItemsDefault[index].complete = todoItem.complete ? false : true;
-          setItLocal(todoItemsDefault);
-        }
-      });
+const form = document.getElementById('form');
+const taskinput = document.querySelector('.taskadder');
+const sync = document.querySelector('.sync');
+const entericon = document.querySelector('.enter-icon');
+const deletecompleted = document.getElementById('delcompleted');
+const list = [];
+let displayedList;
 
-      deleteButton.addEventListener("click", function () {
-        if (todoItem.description == this.dataset.description) {
-          item.remove();
-          todoItemsDefault.splice(todoItemsDefault.indexOf(todoItem), 1);
-          setItLocal(todoItemsDefault);
-        }
-      });
+const todoList = (arr) => {
+  arr.forEach((element) => {
+    const duties = document.getElementById('duties');
+    // Create task li //
+    duties
+      .appendChild(document.createElement('li'))
+      .setAttribute('id', element.index);
+    const task = document.getElementById(element.index);
+    task.classList.add('task', 'draggable');
+    // Create checkbox //
+    task
+      .appendChild(document.createElement('input'))
+      .setAttribute('id', `${element.index}-checkbox`);
+    const checkbox = document.getElementById(`${element.index}-checkbox`);
+    checkbox.setAttribute('type', 'checkbox');
+    checkbox.classList.add('checkbox');
+    // Create description //
+    task
+      .appendChild(document.createElement('p'))
+      .setAttribute('id', `${element.index}-description`);
+    const description = document.getElementById(`${element.index}-description`);
+    description.classList.add('description');
+    description.innerText = element.description;
+    // Create DragBtn //
+    task
+      .appendChild(document.createElement('i'))
+      .setAttribute('id', `${element.index}-drag`);
+    const dragBtn = document.getElementById(`${element.index}-drag`);
+    dragBtn.classList.add('fas', 'fa-ellipsis-v', 'drag-btn');
+    // create trashcan //
+    task
+      .appendChild(document.createElement('i'))
+      .setAttribute('id', `${element.index}-trash`);
+    const trashBtn = document.getElementById(`${element.index}-trash`);
+    trashBtn.classList.add('far', 'fa-trash-alt', 'trash-btn');
+    // Create add event listeners //
+    mousedown(dragBtn);
+  });
+  dragndrop(arr);
+  status(arr);
+  prepopstatus(arr);
+  edit(arr);
+  removetask(arr);
+};
 
-      editButton.addEventListener('click', function () {
-        if (todoItem.description == this.dataset.description) {
-          item.classList.toggle("list-group-item-success");
-          //
-          setItLocal(todoItemsDefault);
-        }
-      });
-    }
-
-    return {
-      item,
-      doneButton,
-      deleteButton,
-    };
+const retrieve = () => {
+  if (JSON.parse(localStorage.getItem('tasklist'))) {
+    displayedList = JSON.parse(localStorage.getItem('tasklist'));
+    todoList(displayedList);
+  } else {
+    displayedList = list;
+    todoList(displayedList);
   }
+};
 
-  function createTodoApp(container, title = "Tasks", arrayCases) {
-    let todoAppTitle = createAppTitle(title);
-    let todoItemForm = createTodoItemForm();
-    let todoList = createTodoList();
-
-    if (localStorage.getItem("todoItems") == null) {
-      setItLocal(arrayCases);
-    }
-
-    container.append(todoAppTitle);
-    container.append(todoItemForm.form);
-    container.append(todoList);
-
-    for (let todoItem of todoItemsDefault) {
-      let todoItemElem = createTodoItem(todoItem.description, todoItem.complete);
-
-      todoList.append(todoItemElem.item);
-    }
-
-    todoItemForm.form.addEventListener("submit", function (e) {
-      e.preventDefault();
-      if (!todoItemForm.input.value) {
-        return;
-      }
-      todoItemsDefault.push({
-        description: todoItemForm.input.value,
-        complete: false,
-        index: todoItemsDefault.length+1
-      });
-      setItLocal(todoItemsDefault);
-
-      let todoItem = createTodoItem(todoItemForm.input.value);
-      todoList.append(todoItem.item);
-      todoItemForm.input.value = "";
-    });
+form.addEventListener('submit', (e) => {
+  e.preventDefault();
+  if (taskinput.value !== '') {
+    const duty = new Duty(taskinput.value);
+    duty.push(displayedList);
   }
-  window.createTodoApp = createTodoApp;
-})();
-
-let defaultTasks = [
-  {description: 'Create Todo project', complete: true, index: 1},
-  {description: 'Give feedback to partners', complete: false, index: 2},
-  {description: 'Spend week-end with family', complete: false, index: 3}
-];
-
-document.addEventListener('DOMContentLoaded', function() {
-  createTodoApp(document.getElementById('todo-app'), 'Today`s To Do', defaultTasks);
 });
+
+entericon.addEventListener('click', (e) => {
+  e.preventDefault();
+  if (taskinput.value !== '') {
+    const duty = new Duty(taskinput.value);
+    duty.push(displayedList);
+  }
+});
+
+deletecompleted.addEventListener('click', (e) => {
+  e.preventDefault();
+  removecompleted(displayedList);
+});
+
+sync.addEventListener('click', (e) => {
+  e.preventDefault();
+  removeAll(displayedList);
+});
+
+document.addEventListener('load', retrieve());

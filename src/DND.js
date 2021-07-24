@@ -1,55 +1,98 @@
 /* eslint-disable */
 
-class DND {
-  constructor() {
-    this.prevRow;
-  }
+function dragFunction() {
+  const draggables = document.querySelectorAll('.item');
 
-  setEventListeners() {
-    let listItems = document.querySelectorAll('li');
-  
-    listItems.forEach((listItem) => {
-  
-      listItem.addEventListener('dragstart', (e) => this.start(e));
-      listItem.addEventListener('dragover', (e) => this.over(e));
-      listItem.addEventListener('drop', (e) => this.drop(e));
-  
+  draggables.forEach((draggable) => {
+    draggable.addEventListener('dragstart', () => {
+      draggable.classList.add('dragging');
     });
-  }
+    draggable.addEventListener('dragend', () => {
+      draggable.classList.remove('dragging');
+    });
+  });
 
-  start(e) {
-    this.prevRow = e.target;
-
-    let HTMLContent = e.target.innerHTML;
-    let checkboxStatus = e.target.querySelector('input').checked;
-
-    e.dataTransfer.setData('html-content', HTMLContent);
-    e.dataTransfer.setData('checkbox-status', checkboxStatus);
-  }
-
-  over(e) {
-    let currRow;
-
-    if (e.target.parentNode.tagName === 'LI') currRow = e.target.parentNode;
-    else if (e.target.parentNode.tagName === 'DIV') currRow = e.target.parentNode.parentNode;
-    else currRow = e.target;
-
+  const container = document.getElementById('show');
+  container.addEventListener('dragover', (e) => {
     e.preventDefault();
 
-    if (this.prevRow !== currRow) {
-      this.prevRow.innerHTML = currRow.innerHTML;
-      this.prevRow.querySelector('input').checked = currRow.querySelector('input').checked;
-      currRow.innerHTML = '';
-      this.prevRow = currRow;
+    const afterElement = getDragAfterElement(container, e.clientY);
+    const currentDragging = document.querySelector('.dragging');
+    if (afterElement == null) {
+      container.appendChild(currentDragging);
+    } else {
+      container.insertBefore(currentDragging, afterElement);
     }
+  });
+}
+
+function getDragAfterElement(container, y) {
+  const draggableElements = [...container.querySelectorAll('.item:not(.dragging)')];
+  return draggableElements.reduce(
+    (closest, child) => {
+      const box = child.getBoundingClientRect();
+      const offset = y - box.top - box.height / 2;
+      if (offset < 0 && offset > closest.offset) {
+        return { offset, element: child };
+      }
+      return closest;
+    },
+    {
+      offset: Number.NEGATIVE_INFINITY,
+    },
+  ).element;
+}
+
+function statusUpdate(theItem) {
+  const theId = parseInt(theItem.id.match(/\d+/g)[0], 10);
+
+  if (list[theId - 1].completed === false) {
+    list[theId - 1].completed = true;
+  } else {
+    list[theId - 1].completed = false;
   }
 
-  drop(e) {
-    const HTMLContent = e.dataTransfer.getData('html-content');
-    const checkboxStatus = e.dataTransfer.getData('checkbox-status');
+  localStorage.setItem(theId, JSON.stringify(list[theId - 1]));
+}
+  
+function sorting(source, target) {
+  const savedList = JSON.parse(localStorage.getItem('savedList'));
+  if (savedList.length < 2) return;
 
-    e.target.innerHTML = HTMLContent;
-    e.target.querySelector('input').checked = (checkboxStatus === 'true');
+  const sourceObj = savedList[source];
+  const souceIndex = savedList[source].index;
+  let targetIndex;
+  savedList.forEach((obj) => {
+    if (obj.index === Number(target)) {
+      targetIndex = savedList.indexOf(obj);
+    }
+  });
+
+  savedList[source].index = savedList[targetIndex].index;
+  savedList[targetIndex].index = souceIndex;
+
+  savedList[source] = savedList[targetIndex];
+  savedList[targetIndex] = sourceObj;
+  localStorage.setItem('savedList', JSON.stringify(savedList));
+}
+
+export default function dragAndDrop(event, index) {
+  const newEvent = event.type;
+  const source = index;
+  switch (newEvent) {
+    case 'dragstart':
+      event.target.classList.add('dragging');
+      break;
+    case 'dragend':
+      event.target.classList.remove('dragging');
+      sorting(source, target);
+      break;
+    case 'dragover':
+      if (event.target.className === 'list-item') {
+        target = event.target.children[2].innerHTML;
+      }
+      break;
+    default:
+      break;
   }
-
 }
